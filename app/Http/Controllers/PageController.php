@@ -22,7 +22,7 @@ class PageController extends Controller
 
     }
 
-    public function detail(){
-        return Inertia::render('app/MovieDetial');
+    public function detail($id){
+        return Inertia::render('app/MovieDetial', compact('id'));
     }
 }

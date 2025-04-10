@@ -7,7 +7,7 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
+    return Inertia::render('Auth/Login', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
@@ -20,7 +20,7 @@ Route::middleware(['auth', 'verified'])->group(function(){
     Route::get('/tv-shows', [PageController::class, 'tvShows'])->name('tv-shows');
     Route::get('/actors', [PageController::class, 'actors'])->name('actors');
 
-    Route::get('/detail', [PageController::class, 'detail'])->name('movie.detail');
+    Route::get('/detail/{id}', [PageController::class, 'detail'])->name('movie.detail');
 });
 
 Route::middleware('auth')->group(function () {
