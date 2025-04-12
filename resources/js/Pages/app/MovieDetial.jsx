@@ -1,13 +1,22 @@
+import { api, apiKey } from '@/api/apiResource';
 import { usePage } from '@inertiajs/react'
 import { Card } from 'flowbite-react'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 const MovieDetial = ({ id }) => {
     const { popularMovies, genres } = usePage().props;
 
-    const movie = popularMovies.filter(movie => movie.id == Number(id))[0];
+    const [movie, setMovie] = useState([]);
 
-    console.log('movie', movie);
+    const getMovieDetails = async () => {
+        const response = await api.get(`movie/` + id + `?api_key=` + apiKey);
+        setMovie(response.data);
+        console.log('response', response);
+    }
+
+    useEffect(() => {
+        getMovieDetails();
+    }, [id]);
 
     return (
         <>
@@ -31,9 +40,9 @@ const MovieDetial = ({ id }) => {
                                     <span>,</span>
                                     <small><i className="fa-solid fa-calendar-days me-1 text-primary-500"></i>{movie.release_date}</small>
                                     <span>,</span>
-                                    <small>{
+                                    {/* <small>{
                                         genres.filter((genre) => movie.genre_ids.includes(genre.id)).map((genre) => genre.name).join(', ')
-                                    }</small>
+                                    }</small> */}
                                     <span>,</span>
                                     <small>{ }</small>
                                 </div>
