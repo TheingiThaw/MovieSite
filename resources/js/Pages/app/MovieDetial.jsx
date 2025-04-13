@@ -4,14 +4,19 @@ import { Card } from 'flowbite-react'
 import React, { useEffect, useState } from 'react'
 
 const MovieDetial = ({ id }) => {
-    const { popularMovies, genres } = usePage().props;
+    const { genres } = usePage().props;
 
     const [movie, setMovie] = useState([]);
 
+    const trailer = movie.videos?.results.find(video => video.name === 'Official Trailer');
+    const movieURL = `https://youtube.com/watch?v=${trailer?.key}`;
+
     const getMovieDetails = async () => {
-        const response = await api.get(`movie/` + id + `?api_key=` + apiKey);
+        const response = await api.get(
+            `movie/${id}?api_key=${apiKey}&append_to_response=credits,videos,images`
+        );
         setMovie(response.data);
-        console.log('response', response);
+        console.log('response', response.data);
     }
 
     useEffect(() => {
@@ -40,11 +45,13 @@ const MovieDetial = ({ id }) => {
                                     <span>,</span>
                                     <small><i className="fa-solid fa-calendar-days me-1 text-primary-500"></i>{movie.release_date}</small>
                                     <span>,</span>
-                                    {/* <small>{
-                                        genres.filter((genre) => movie.genre_ids.includes(genre.id)).map((genre) => genre.name).join(', ')
-                                    }</small> */}
+                                    <small>
+                                        {movie.genres?.map(genre => genre.name).join(', ')}
+                                    </small>
                                     <span>,</span>
-                                    <small>{ }</small>
+                                    {/* <small><i className="fa-solid fa-globe me-1"></i>{movie.spoken_languages[0].name}</small> */}
+                                    <span>,</span>
+                                    <small></small>
                                 </div>
 
                                 <p className="font-normal text-gray-700 dark:text-gray-400">
@@ -54,21 +61,19 @@ const MovieDetial = ({ id }) => {
                                 <div>
                                     <h3 className='my-3'>Featured Cast</h3>
 
-                                    <div className="flex gap-3">
-                                        <div className="flex flex-col">
-                                            <h3>Director Name</h3>
-                                            <p className='text-gray-500'>ScreenPlay, Director, Story</p>
-                                        </div>
-                                        <div className="flex flex-col">
-                                            <h3>Director Name</h3>
-                                            <p className='text-gray-500'>ScreenPlay, Director, Story</p>
-                                        </div>
+                                    <div className="flex gap-5">
+                                        {movie.credits?.crew?.slice(0, 2).map((crew, index) => (
+                                            <div key={index} className="flex flex-col">
+                                                <h3 className='font-semibold'>{crew.name}</h3>
+                                                <p className='text-gray-500'>{crew.job}</p>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
 
-                                <button className='bg-yellow-400 py-2 flex items-center justify-center rounded-lg min-w-[100px] max-w-[150px]'>
-                                    Play Trailor
-                                </button>
+                                <div className='bg-yellow-400 py-2 flex items-center justify-center rounded-lg min-w-[100px] max-w-[150px]'>
+                                    <a href={movieURL}>Play Trailor</a>
+                                </div>
 
                             </div>
                         </div>
@@ -78,88 +83,51 @@ const MovieDetial = ({ id }) => {
                         <div className='my-5 py-5'>
                             <h2 className='text-xl font-bold text-yellow-350 uppercase my-3 px-5'>Cast</h2>
 
-                            <div className='flex items-center justify-center'>
-                                <div className='flex flex-wrap gap-3'>
-                                    <Card
-                                        className=" max-w-[200px] text-sm mt-3 h-auto"
-                                        imgAlt="Meaningful alt text for an image that is not purely decorative"
-                                        imgSrc='/movie/p_moana2_payoff_5787a994.jpeg'
-                                    // imgSrc={`https://image.tmdb.org/t/p/w500/${data.poster_path}`}
-                                    >
-                                        <h5 className="text-xl flex-wrap font-bold tracking-tight text-gray-900 dark:text-white">
-                                            Real Name
-                                            {/* {data.title} */}
-                                        </h5>
-                                        <div>
-                                            <p>Movie Name</p>
-                                        </div>
-                                    </Card>
-                                    <Card
-                                        className=" max-w-[200px] text-sm mt-3 h-auto"
-                                        imgAlt="Meaningful alt text for an image that is not purely decorative"
-                                        imgSrc='/movie/p_moana2_payoff_5787a994.jpeg'
-                                    // imgSrc={`https://image.tmdb.org/t/p/w500/${data.poster_path}`}
-                                    >
-                                        <h5 className="text-xl flex-wrap font-bold tracking-tight text-gray-900 dark:text-white">
-                                            Real Name
-                                            {/* {data.title} */}
-                                        </h5>
-                                        <div>
-                                            <p>Movie Name</p>
-                                        </div>
-                                    </Card>
-                                    <Card
-                                        className=" max-w-[200px] text-sm mt-3 h-auto"
-                                        imgAlt="Meaningful alt text for an image that is not purely decorative"
-                                        imgSrc='/movie/p_moana2_payoff_5787a994.jpeg'
-                                    // imgSrc={`https://image.tmdb.org/t/p/w500/${data.poster_path}`}
-                                    >
-                                        <h5 className="text-xl flex-wrap font-bold tracking-tight text-gray-900 dark:text-white">
-                                            Real Name
-                                            {/* {data.title} */}
-                                        </h5>
-                                        <div>
-                                            <p>Movie Name</p>
-                                        </div>
-                                    </Card>
-                                    <Card
-                                        className=" max-w-[200px] text-sm mt-3 h-auto"
-                                        imgAlt="Meaningful alt text for an image that is not purely decorative"
-                                        imgSrc='/movie/p_moana2_payoff_5787a994.jpeg'
-                                    // imgSrc={`https://image.tmdb.org/t/p/w500/${data.poster_path}`}
-                                    >
-                                        <h5 className="text-xl flex-wrap font-bold tracking-tight text-gray-900 dark:text-white">
-                                            Real Name
-                                            {/* {data.title} */}
-                                        </h5>
-                                        <div>
-                                            <p>Movie Name</p>
-                                        </div>
-                                    </Card>
-                                    <Card
-                                        className=" max-w-[200px] text-sm mt-3 h-auto"
-                                        imgAlt="Meaningful alt text for an image that is not purely decorative"
-                                        imgSrc='/movie/p_moana2_payoff_5787a994.jpeg'
-                                    // imgSrc={`https://image.tmdb.org/t/p/w500/${data.poster_path}`}
-                                    >
-                                        <h5 className="text-xl flex-wrap font-bold tracking-tight text-gray-900 dark:text-white">
-                                            Real Name
-                                            {/* {data.title} */}
-                                        </h5>
-                                        <div>
-                                            <p>Movie Name</p>
-                                        </div>
-                                    </Card>
+                            <div className="overflow-x-auto whitespace-nowrap py-5">
+                                <div className="inline-flex gap-4">
+                                    {movie.credits?.cast?.map((cast, index) => (
+                                        <Card
+                                            key={index}
+                                            className="min-w-[200px] max-w-[200px] text-sm h-auto"
+                                            imgAlt={`${cast.original_name}'s profile picture`}
+                                            imgSrc={
+                                                cast.profile_path
+                                                    ? `https://image.tmdb.org/t/p/w500/${cast.profile_path}`
+                                                    : '/default-profile.jpg' // fallback image
+                                            }
+                                        >
+                                            <h5 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                                {cast.original_name}
+                                            </h5>
+                                            <p className="text-gray-500">{cast.character}</p>
+                                        </Card>
+                                    ))}
                                 </div>
                             </div>
+
                         </div>
 
                         <hr></hr>
 
+                        {/* images */}
+                        <div className='my-5 py-5'>
+                            <h2 className='text-xl font-bold text-yellow-350 uppercase my-3 px-5'>Images</h2>
 
-                        <div>
-
+                            <div className="overflow-x-auto whitespace-nowrap">
+                                <div className="inline-flex gap-4">
+                                    {movie.images?.backdrops?.map((image, index) => (
+                                        <div key={index} className="flex-shrink-0">
+                                            <img
+                                                src={image.file_path ? `https://image.tmdb.org/t/p/w500/${image.file_path}` : 'movie/download.png'}
+                                                alt={`Backdrop ${index + 1}`}
+                                                className="rounded-lg w-[300px] h-[170px] object-cover"
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
+
                     </div>
                 )
             }

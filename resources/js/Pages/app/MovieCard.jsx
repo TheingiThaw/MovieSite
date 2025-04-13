@@ -27,8 +27,8 @@ const MovieCard = ({ movie }) => {
                     {movie.title}
                 </h5>
                 <div className="flex gap-3">
-                    <p><i className="fa-solid fa-star"></i>{movie.vote_average}</p>
-                    <p><i className="fa-solid fa-calendar-days me-1"></i>{movie.release_date}</p>
+                    <p><i className="fa-solid fa-star me-1 text-yellow-300"></i>{movie.vote_average}</p>
+                    <p><i className="fa-solid fa-calendar-days me-1 text-blue-400"></i>{movie.release_date}</p>
                 </div>
                 <div>
                     <p>
