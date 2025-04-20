@@ -1,13 +1,33 @@
-import React from 'react'
+import { api, apiKey } from '@/api/apiResource';
+import { router } from '@inertiajs/react';
+import React, { useState } from 'react'
 
 const SearchForm = () => {
-    const
+    const [searchKey, setSearchKey] = useState('');
+    const [movies, setMovies] = useState([]);
 
+    const handleSearch = async (e) => {
+        e.preventDefault();
+        try {
+            const getMovie = await api.get(`search/movie?api_key=${apiKey}&query=${searchKey}`);
+            const response = getMovie.data.results;
+            setMovies(response);
+            console.log(movies);
+        }
+        catch (error) {
+            console.error('Error fetching movie:', error);
+        }
+    }
 
+    const movieOnClick = (id) => {
+        router.get(route('movie.detail', id));
+        setSearchKey('');
+        setMovies([]);
+    }
 
     return (
         <div className='flex flex-col gap-5 relative mt-3'>
-            <div className="w-full max-w-sm flex items-center">
+            <form className="w-full max-w-sm flex items-center" onSubmit={handleSearch}>
                 <label className="flex items-center gap-2 border border-gray-200 rounded-lg px-2">
                     <svg
                         className="h-5 w-5 text-gray-400"
@@ -27,15 +47,22 @@ const SearchForm = () => {
                         className="w-full outline-none border-0 bg-transparent"
                         required
                         placeholder="Search"
+                        onChange={(e) => setSearchKey(e.target.value)}
                     />
                 </label>
-            </div>
-            <div className='w-60 rounded-lg shadow-lg bg-gray-300 z-10'>
-                <div className='border-b px-4 py-2 flex'>
-                    <img className='rounded-log' src={`https://image.tmdb.org/t/p/w500/`} ></img>
-                    <h3 className="font-semibold text-center text-gray-900">Movie Title</h3>
+            </form>
+            {movies.length > 0 && (
+                <div className='w-60 rounded-lg shadow-lg bg-gray-200 z-10'>
+                    {movies.slice(0, 5).map((movie) => (
+                        <div onClick={() => movieOnClick(movie.id)} key={movie.id} className='border-b px-4 py-2 flex'>
+                            <img className='rounded-log w-12 h-16 object-cover' src={movie.poster_path ? `https://image.tmdb.org/t/p/w92/${movie.poster_path}` : 'movie/download.png'}
+                                alt={`${movie.title} movie poster`}
+                            ></img>
+                            <h3 className="font-semibold flex items-center text-gray-900">{movie.title}</h3>
+                        </div>
+                    ))}
                 </div>
-            </div>
+            )}
         </div>
     )
 }

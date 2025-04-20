@@ -49,9 +49,8 @@ const MovieDetial = ({ id }) => {
                                         {movie.genres?.map(genre => genre.name).join(', ')}
                                     </small>
                                     <span>,</span>
-                                    {/* <small><i className="fa-solid fa-globe me-1"></i>{movie.spoken_languages[0].name}</small> */}
-                                    <span>,</span>
-                                    <small></small>
+                                    <small><i className="fa-solid fa-globe me-1"></i>{movie.spoken_languages[0].name}</small>
+
                                 </div>
 
                                 <p className="font-normal text-gray-700 dark:text-gray-400">
