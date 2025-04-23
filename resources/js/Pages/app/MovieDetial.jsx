@@ -1,15 +1,17 @@
 import { api, apiKey } from '@/api/apiResource';
-import { usePage } from '@inertiajs/react'
+import { router, usePage } from '@inertiajs/react'
 import { Card } from 'flowbite-react'
 import React, { useEffect, useState } from 'react'
+import MovieModal from './MovieModal';
 
 const MovieDetial = ({ id }) => {
     const { genres } = usePage().props;
 
     const [movie, setMovie] = useState([]);
 
+
     const trailer = movie.videos?.results.find(video => video.name === 'Official Trailer');
-    const movieURL = `https://youtube.com/watch?v=${trailer?.key}`;
+    const movieURL = `https://www.youtube.com/embed/${trailer?.key}`;
 
     const getMovieDetails = async () => {
         const response = await api.get(
@@ -17,7 +19,13 @@ const MovieDetial = ({ id }) => {
         );
         setMovie(response.data);
         console.log('response', response.data);
-    }
+    };
+
+    // const handleTrailor = () => {
+    //     if (trailer) {
+
+    //     }
+    // }
 
     useEffect(() => {
         getMovieDetails();
@@ -49,7 +57,7 @@ const MovieDetial = ({ id }) => {
                                         {movie.genres?.map(genre => genre.name).join(', ')}
                                     </small>
                                     <span>,</span>
-                                    <small><i className="fa-solid fa-globe me-1"></i>{movie.spoken_languages[0].name}</small>
+                                    {/* <small><i className="fa-solid fa-globe me-1"></i>{movie.spoken_languages[0].name}</small> */}
 
                                 </div>
 
@@ -70,9 +78,11 @@ const MovieDetial = ({ id }) => {
                                     </div>
                                 </div>
 
-                                <div className='bg-yellow-400 py-2 flex items-center justify-center rounded-lg min-w-[100px] max-w-[150px]'>
-                                    <a href={movieURL}>Play Trailor</a>
-                                </div>
+                                {/* <div className='bg-yellow-400 py-2 flex items-center justify-center rounded-lg min-w-[100px] max-w-[150px]'>
+                                    <button onClick={() => setShowModal((prev) => !prev)}>Play Trailor</button>
+                                </div> */}
+
+                                <MovieModal videoUrl={movieURL} />
 
                             </div>
                         </div>
