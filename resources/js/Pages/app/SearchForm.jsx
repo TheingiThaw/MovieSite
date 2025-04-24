@@ -1,10 +1,11 @@
 import { api, apiKey } from '@/api/apiResource';
 import { router } from '@inertiajs/react';
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 const SearchForm = () => {
     const [searchKey, setSearchKey] = useState('');
     const [movies, setMovies] = useState([]);
+    const dropdownRef = useRef(null);
 
     const handleSearch = async (e) => {
         e.preventDefault();
@@ -12,7 +13,7 @@ const SearchForm = () => {
             const getMovie = await api.get(`search/movie?api_key=${apiKey}&query=${searchKey}`);
             const response = getMovie.data.results;
             setMovies(response);
-            console.log(movies);
+            // console.log(movies);
         }
         catch (error) {
             console.error('Error fetching movie:', error);
@@ -25,8 +26,21 @@ const SearchForm = () => {
         setMovies([]);
     }
 
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setMovies([]);
+            }
+        }
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
     return (
-        <div className='flex flex-col gap-5 relative mt-3'>
+        <div ref={dropdownRef} className='flex flex-col gap-5 relative mt-3'>
             <form className="w-full max-w-sm flex items-center" onSubmit={handleSearch}>
                 <label className="flex items-center gap-2 border border-gray-200 rounded-lg px-2">
                     <svg
@@ -47,6 +61,7 @@ const SearchForm = () => {
                         className="w-full outline-none border-0 bg-transparent"
                         required
                         placeholder="Search"
+                        onFocus={handleSearch}
                         onChange={(e) => setSearchKey(e.target.value)}
                     />
                 </label>

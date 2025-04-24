@@ -8,7 +8,8 @@ const MovieDetial = ({ id }) => {
     const { genres } = usePage().props;
 
     const [movie, setMovie] = useState([]);
-
+    const [showMovieModal, setShowMovieModal] = useState(false);
+    const [selectedImage, setSelectedImage] = useState();
 
     const trailer = movie.videos?.results.find(video => video.name === 'Official Trailer');
     const movieURL = `https://www.youtube.com/embed/${trailer?.key}`;
@@ -20,12 +21,6 @@ const MovieDetial = ({ id }) => {
         setMovie(response.data);
         console.log('response', response.data);
     };
-
-    // const handleTrailor = () => {
-    //     if (trailer) {
-
-    //     }
-    // }
 
     useEffect(() => {
         getMovieDetails();
@@ -78,11 +73,15 @@ const MovieDetial = ({ id }) => {
                                     </div>
                                 </div>
 
-                                {/* <div className='bg-yellow-400 py-2 flex items-center justify-center rounded-lg min-w-[100px] max-w-[150px]'>
-                                    <button onClick={() => setShowModal((prev) => !prev)}>Play Trailor</button>
-                                </div> */}
+                                <button
+                                    onClick={() => setShowMovieModal(true)}
+                                    className="bg-yellow-400 py-2 flex items-center justify-center rounded-lg min-w-[100px] max-w-[150px]"
 
-                                <MovieModal videoUrl={movieURL} />
+                                >
+                                    Play Trailer
+                                </button>
+
+                                {showMovieModal && (<MovieModal videoUrl={movieURL} onClose={() => setShowMovieModal(false)} />)}
 
                             </div>
                         </div>
@@ -127,10 +126,14 @@ const MovieDetial = ({ id }) => {
                                     {movie.images?.backdrops?.map((image, index) => (
                                         <div key={index} className="flex-shrink-0">
                                             <img
+                                                onClick={() => setSelectedImage(image.file_path)}
                                                 src={image.file_path ? `https://image.tmdb.org/t/p/w500/${image.file_path}` : 'movie/download.png'}
                                                 alt={`Backdrop ${index + 1}`}
                                                 className="rounded-lg w-[300px] h-[170px] object-cover"
                                             />
+                                            {selectedImage && (
+                                                <MovieModal onClose={() => setSelectedImage(null)} imageUrl={`https://image.tmdb.org/t/p/w500/${selectedImage}`} />
+                                            )}
                                         </div>
                                     ))}
                                 </div>
