@@ -6,7 +6,6 @@ const PopularMovies = () => {
 
     const { popularMovies, genres } = usePage().props;
 
-
     return (
         <div>
             <h2 className='text-xl font-bold text-yellow-350 uppercase my-3 px-5'>Popular Movies</h2>

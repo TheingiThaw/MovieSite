@@ -21,6 +21,7 @@ Route::middleware(['auth', 'verified'])->group(function(){
     Route::get('/actors', [PageController::class, 'actors'])->name('actors');
 
     Route::get('/detail/{id}', [PageController::class, 'detail'])->name('movie.detail');
+    Route::get('/actor/{id}', [PageController::class, 'actor'])->name('actor.detail');
 });
 
 Route::middleware('auth')->group(function () {

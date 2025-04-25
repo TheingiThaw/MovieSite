@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Inertia\Middleware;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
@@ -45,6 +46,14 @@ class HandleInertiaRequests extends Middleware
             ])->json()['results'] ?? [];
         });
 
+        $popularActors = Cache::remember('popular_actors', 3600, function () {
+            return Http::get("https://api.themoviedb.org/3/person/popular", [
+                'api_key' => config('services.tmdb.api_key')
+            ])->json()['results'] ?? [];
+        });
+
+        // Log::info('actors', ['popular_actors' => $popularActors]);
+
         return [
             ...parent::share($request),
             'auth' => [
@@ -52,6 +61,7 @@ class HandleInertiaRequests extends Middleware
             ],
             'genres' => $genres,
             'popularMovies' => $popularMovies,
+            'popularActors' => $popularActors,
         ];
     }
 }

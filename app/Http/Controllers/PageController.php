@@ -19,7 +19,11 @@ class PageController extends Controller
     }
 
     public function actors(){
+        return Inertia::render('app/Actors');
+    }
 
+    public function actor($id){
+        return Inertia::render('app/ActorDetail', compact('id'));
     }
 
     public function detail($id){
