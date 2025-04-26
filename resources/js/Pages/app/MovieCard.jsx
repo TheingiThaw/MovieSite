@@ -10,10 +10,15 @@ const MovieCard = ({ movie }) => {
     const page = usePage();
     const { genres } = page.props;
 
-    // console.log('genres', genres);
+    console.log('movie', movie);
 
     const movieOnClick = (id) => {
-        router.get(route('movie.detail', id));
+        if (movie.name) {
+            router.get(route('tv.shows.detail', id));
+        }
+        else {
+            router.get(route('movie.detail', id));
+        }
     }
 
     return (
@@ -24,11 +29,11 @@ const MovieCard = ({ movie }) => {
                 imgSrc={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
             >
                 <h5 className="text-xl flex-wrap font-bold tracking-tight text-gray-900 dark:text-white">
-                    {movie.title}
+                    {movie.title ? movie.title : movie.name}
                 </h5>
                 <div className="flex gap-3">
                     <p><i className="fa-solid fa-star me-1 text-yellow-300"></i>{movie.vote_average}</p>
-                    <p><i className="fa-solid fa-calendar-days me-1 text-blue-400"></i>{movie.release_date}</p>
+                    <p><i className="fa-solid fa-calendar-days me-1 text-blue-400"></i>{movie.release_date ? movie.release_date : movie.first_air_date}</p>
                 </div>
                 <div>
                     <p>

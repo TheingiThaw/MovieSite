@@ -12,8 +12,8 @@ const ActorCard = ({ actor }) => {
         return movie.title ?? movie.name;
     }).join(', ');
 
-    console.log(actor);
-    console.log(knownFor);
+    // console.log(actor);
+    // console.log(knownFor);
 
     return (
         <div onClick={() => actorOnClick(actor.id)}>

@@ -52,6 +52,12 @@ class HandleInertiaRequests extends Middleware
             ])->json()['results'] ?? [];
         });
 
+        $popularTVShows = Cache::remember('popular_tvshows', 3600, function () {
+            return Http::get("https://api.themoviedb.org/3/tv/popular", [
+                'api_key' => config('services.tmdb.api_key')
+            ])->json()['results'] ?? [];
+        });
+
         // Log::info('actors', ['popular_actors' => $popularActors]);
 
         return [
@@ -62,6 +68,7 @@ class HandleInertiaRequests extends Middleware
             'genres' => $genres,
             'popularMovies' => $popularMovies,
             'popularActors' => $popularActors,
+            'popularTVShows' => $popularTVShows,
         ];
     }
 }

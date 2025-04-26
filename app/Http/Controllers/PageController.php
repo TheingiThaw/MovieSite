@@ -15,7 +15,7 @@ class PageController extends Controller
     }
 
     public function tvShows(){
-        return ;
+        return Inertia::render('app/TVshows');
     }
 
     public function actors(){
@@ -28,5 +28,9 @@ class PageController extends Controller
 
     public function detail($id){
         return Inertia::render('app/MovieDetial', compact('id'));
+    }
+
+    public function tvDetail($id){
+        return Inertia::render('app/TVShowsDetail', compact('id'));
     }
 }
